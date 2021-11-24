@@ -36,7 +36,8 @@ export class AppService {
     limit 0,${+n}
     `;
   const r=await this.clickhouseService.query(sql);
-  return r as DataDto[];
+  console.log(r);
+  return [];
   }
 
 
