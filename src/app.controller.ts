@@ -24,8 +24,8 @@ export class AppController {
   }
   @Post('get-data')
   async getData(
-    @Body() n:number
+    @Body() dto:any
   ):Promise<DataDto[]>{
-    return this.appService.getData(n);
+    return this.appService.getData(dto.n);
   }
 }

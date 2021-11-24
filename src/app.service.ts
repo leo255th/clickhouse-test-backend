@@ -33,11 +33,11 @@ export class AppService {
     const sql=`
     select *
     from test
-    limit 0,${+n}
+    limit 0,${n}
     `;
   const r=await this.clickhouseService.query(sql);
   console.log(r);
-  return [];
+  return r as DataDto[];
   }
 
 
