@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Post } from '@nestjs/common';
 import { AppService } from './app.service';
 
 @Controller()
@@ -11,7 +11,7 @@ export class AppController {
   getHello(): string {
     return this.appService.getHello();
   }
-  @Get('create-table')
+  @Post('create-table')
   async createTable(): Promise<any> {
     return this.appService.createTable();
   }
