@@ -24,8 +24,9 @@ export class AppService {
   // 插入数据，返回被影响的行数
   async addData(dto:DataDto):Promise<number>{
     console.log(dto);
-    let sql=`INSERT INTO test VALUES (${dto.id},'${dto.name}',${dto.age},${dto.time});`;
+    let sql=`INSERT INTO test(id,name,age,\`time\`) VALUES (${dto.id},'${dto.name}',${dto.age},${dto.time});`;
     // sql+=sql;
+    console.log(sql)
     const r=await this.clickhouseService.query(sql);
     return r;
   }
