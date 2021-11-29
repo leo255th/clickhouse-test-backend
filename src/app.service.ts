@@ -104,20 +104,20 @@ export class AppService {
     // 添加数据
     insertSQL+='VALUES(7,\'六子\',13,1637742336316,'
     for(let i=1;i<=300;i++){
-      insertSQL+='1'
+      insertSQL+=(i%2);
       insertSQL+=','
 
     }
     for(let i=1;i<=300;i++){
-      insertSQL+='12.34'
+      insertSQL+=(i+'12.34'+i)
       insertSQL+=','
     }
     for(let i=1;i<=300;i++){
-      insertSQL+='12.34'
+      insertSQL+=(i+'12.34'+i)
       insertSQL+=','
     }
     for(let i=1;i<=300;i++){
-      insertSQL+='12.34'
+      insertSQL+=(i+'12.34'+i)
       if(i!=300){
         insertSQL+=','
       }
