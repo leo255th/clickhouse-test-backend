@@ -22,6 +22,11 @@ export class AppController {
   ): Promise<number> {
     return this.appService.addData(dto);
   }
+  @Post('add-data-interval')
+  async addDataInterval(
+  ): Promise<void> {
+    return this.appService.addDataInterval();
+  }
   @Post('get-data')
   async getData(
     @Body() dto: { n: number }
