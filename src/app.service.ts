@@ -25,7 +25,7 @@ export class AppService {
   // 插入数据，返回被影响的行数
   async addData(dto: DataDto): Promise<number> {
     console.log(dto);
-    let sql = `INSERT INTO test(id,name,age,\`time\`) VALUES (${dto.id},'${dto.name}',${dto.age},${dto.time});`;
+    let sql = `INSERT INTO test(id) VALUES (${dto.id});`;
     sql += sql;
     const r = await this.clickhouseService.query(sql);
     return r;
@@ -79,6 +79,7 @@ export class AppService {
   // 用于测试，每秒插入一条数据
   async addDataInterval() {
     setInterval(async () => {
+      const insertSQL=this.randomValueSQL();
       const start = new Date().getTime();
       const r = await this.clickhouseService.query(insertSQL);
       const end = new Date().getTime();
@@ -91,7 +92,7 @@ export class AppService {
     // 生成插入语句
     let insertSQL = 'INSERT INTO test';
     // 添加字段
-    insertSQL += '(id,name,age,\`time\`,';
+    insertSQL += '(id,';
     for (let i = 1; i <= 300; i++) {
       insertSQL += ('kgl' + i)
       insertSQL += ','
@@ -112,7 +113,7 @@ export class AppService {
     }
     insertSQL += ') '
     // 添加数据
-    insertSQL += 'VALUES(7,\'六子\',13,1637742336316,'
+    insertSQL += 'VALUES(1,'
     for (let i = 1; i <= 300; i++) {
       insertSQL += Math.round(Math.random());
       insertSQL += ','
