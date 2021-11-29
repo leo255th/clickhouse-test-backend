@@ -25,7 +25,7 @@ export class AppService {
   async addData(dto:DataDto):Promise<number>{
     console.log(dto);
     let sql=`INSERT INTO test VALUES (${dto.id},'${dto.name}',${dto.age},${dto.time});`;
-    sql+=sql;
+    // sql+=sql;
     const r=await this.clickhouseService.query(sql);
     return r;
   }
