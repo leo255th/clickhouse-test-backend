@@ -40,5 +40,14 @@ export class AppService {
   return r as DataDto[];
   }
 
+  // 增加字段
+
+  async addCol(colName:string,colType:string):Promise<number>{
+    const sql=`
+    ALTER TABLE test ADD COLUMN ${colName} ${colType};
+    `;
+    const r=await this.clickhouseService.query(sql);
+    return r;
+  }
 
 }

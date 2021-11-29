@@ -18,14 +18,21 @@ export class AppController {
   }
   @Post('add-data')
   async addData(
-    @Body()dto:DataDto
-  ):Promise<number>{
+    @Body() dto: DataDto
+  ): Promise<number> {
     return this.appService.addData(dto);
   }
   @Post('get-data')
   async getData(
-    @Body() dto:any
-  ):Promise<DataDto[]>{
+    @Body() dto: { n: number }
+  ): Promise<DataDto[]> {
     return this.appService.getData(dto.n);
+  }
+
+  @Post('add-col')
+  async addCol(
+    @Body() dto: { colName: string, colType:string }
+  ): Promise<number> {
+    return this.appService.addCol(dto.colName,dto.colType);
   }
 }
