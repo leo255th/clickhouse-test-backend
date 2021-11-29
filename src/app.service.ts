@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DataDto } from './app.dto';
 import { ClickhouseService } from './clickhouse.service';
 import { TableCreateSQL } from './models/table.sql.js'
+import { SqlService } from './utils/sql.class';
 
 @Injectable()
 export class AppService {
@@ -46,6 +47,27 @@ export class AppService {
     const sql=`
     ALTER TABLE test ADD COLUMN IF NOT EXISTS ${colName} ${colType};
     `;
+    const r=await this.clickhouseService.query(sql);
+    return r;
+  }
+  
+  // 用于测试，增加大量字段
+  async addCols():Promise<number>{
+    const sqlService=new SqlService();
+    sqlService.start();
+    for(let i=1;i<=300;i++){
+      sqlService.addOneStatement(`ALTER TABLE test ADD COLUMN IF NOT EXISTS ${'kgl'+i} Nullable(Boolean);`);
+    }
+    for(let i=1;i<=300;i++){
+      sqlService.addOneStatement(`ALTER TABLE test ADD COLUMN IF NOT EXISTS ${'mnl'+i} Nullable(Float32);`);
+    }
+    for(let i=1;i<=300;i++){
+      sqlService.addOneStatement(`ALTER TABLE test ADD COLUMN IF NOT EXISTS ${'yl'+i} Nullable(Float32);`);
+    }
+    for(let i=1;i<=300;i++){
+      sqlService.addOneStatement(`ALTER TABLE test ADD COLUMN IF NOT EXISTS ${'zd'+i} Nullable(Float32);`);
+    }
+    const sql=sqlService.end();
     const r=await this.clickhouseService.query(sql);
     return r;
   }

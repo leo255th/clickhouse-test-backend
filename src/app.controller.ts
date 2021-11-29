@@ -35,4 +35,9 @@ export class AppController {
   ): Promise<number> {
     return this.appService.addCol(dto.colName,dto.colType);
   }
+  @Post('add-cols')
+  async addCols(
+  ): Promise<number> {
+    return this.appService.addCols();
+  }
 }
