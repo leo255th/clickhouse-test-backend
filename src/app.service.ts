@@ -44,7 +44,7 @@ export class AppService {
 
   async addCol(colName:string,colType:string):Promise<number>{
     const sql=`
-    ALTER TABLE test ADD COLUMN ${colName} ${colType};
+    ALTER TABLE test ADD COLUMN IF NOT EXISTS ${colName} ${colType};
     `;
     const r=await this.clickhouseService.query(sql);
     return r;
