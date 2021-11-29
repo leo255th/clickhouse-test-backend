@@ -78,7 +78,7 @@ export class AppService {
 
   // 用于测试，按一定评率插入一条数据
   async addDataInterval() {
-    const dataSize = 600;
+    const dataSize = 1;
     setInterval(async () => {
       const sqls = [];
       const rStart = new Date().getTime();
@@ -93,7 +93,7 @@ export class AppService {
       }
       const end = new Date().getTime();
       console.log('插入完成，耗时' + (end - start) + '毫秒');
-    }, 1000 * 60)
+    }, 1000 )
   }
 
   randomValueSQL(): string {
