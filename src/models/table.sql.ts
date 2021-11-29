@@ -7,7 +7,7 @@
 //   ;
 // `
 export const TableCreateSQL=`
-CREATE TABLE my_test.test3
+CREATE TABLE my_test.test4
 ( id    UInt32,
  kgl1   Boolean,  
  kgl2   Boolean, 

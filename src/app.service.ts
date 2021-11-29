@@ -25,7 +25,7 @@ export class AppService {
   // 插入数据，返回被影响的行数
   async addData(dto: DataDto): Promise<number> {
     console.log(dto);
-    let sql = `INSERT INTO  test3(id) VALUES (${dto.id});`;
+    let sql = `INSERT INTO  test4(id) VALUES (${dto.id});`;
     sql += sql;
     const r = await this.clickhouseService.query(sql);
     return r;
@@ -35,7 +35,7 @@ export class AppService {
   async getData(n: number): Promise<DataDto[]> {
     const sql = `
     select *
-    from  test3
+    from  test4
     limit 0,${n}
     `;
     const r = await this.clickhouseService.query(sql);
@@ -47,7 +47,7 @@ export class AppService {
 
   async addCol(colName: string, colType: string): Promise<number> {
     const sql = `
-    ALTER TABLE  test3 ADD COLUMN IF NOT EXISTS ${colName} ${colType};
+    ALTER TABLE  test4 ADD COLUMN IF NOT EXISTS ${colName} ${colType};
     `;
     const r = await this.clickhouseService.query(sql);
     return r;
@@ -58,16 +58,16 @@ export class AppService {
     const sqlService = new SqlService();
     sqlService.start();
     for (let i = 1; i <= 300; i++) {
-      sqlService.addOneStatement(`ALTER TABLE  test3 ADD COLUMN IF NOT EXISTS ${'kgl' + i} Boolean;`);
+      sqlService.addOneStatement(`ALTER TABLE  test4 ADD COLUMN IF NOT EXISTS ${'kgl' + i} Boolean;`);
     }
     for (let i = 1; i <= 300; i++) {
-      sqlService.addOneStatement(`ALTER TABLE  test3 ADD COLUMN IF NOT EXISTS ${'mnl' + i} Float32;`);
+      sqlService.addOneStatement(`ALTER TABLE  test4 ADD COLUMN IF NOT EXISTS ${'mnl' + i} Float32;`);
     }
     for (let i = 1; i <= 300; i++) {
-      sqlService.addOneStatement(`ALTER TABLE  test3 ADD COLUMN IF NOT EXISTS ${'yl' + i} Float32;`);
+      sqlService.addOneStatement(`ALTER TABLE  test4 ADD COLUMN IF NOT EXISTS ${'yl' + i} Float32;`);
     }
     for (let i = 1; i <= 300; i++) {
-      sqlService.addOneStatement(`ALTER TABLE  test3 ADD COLUMN IF NOT EXISTS ${'zd' + i} Float32;`);
+      sqlService.addOneStatement(`ALTER TABLE  test4 ADD COLUMN IF NOT EXISTS ${'zd' + i} Float32;`);
     }
     const sqlList = sqlService.end();
     for (const sql of sqlList) {
@@ -76,21 +76,30 @@ export class AppService {
     return 1;
   }
 
-  // 用于测试，每秒插入一条数据
+  // 用于测试，按一定评率插入一条数据
   async addDataInterval() {
+    const dataSize = 600;
     setInterval(async () => {
-      const insertSQL=this.randomValueSQL();
+      const sqls = [];
+      const rStart = new Date().getTime();
+      for (let i = 0; i < dataSize; i++) {
+        sqls.push(this.randomValueSQL());
+      }
+      const rEnd = new Date().getTime();
+      console.log('生成随机数据完成，耗时' + (rEnd - rStart) + '毫秒');
       const start = new Date().getTime();
-      const r = await this.clickhouseService.query(insertSQL);
+      for (const sql of sqls) {
+        await this.clickhouseService.query(sql);
+      }
       const end = new Date().getTime();
       console.log('插入完成，耗时' + (end - start) + '毫秒');
-    }, 100)
+    }, 1000 * 60)
   }
 
   randomValueSQL(): string {
-    const start = new Date().getTime();
+    // const start = new Date().getTime();
     // 生成插入语句
-    let insertSQL = 'INSERT INTO  test3';
+    let insertSQL = 'INSERT INTO  test4';
     // 添加字段
     insertSQL += '(id,';
     for (let i = 1; i <= 300; i++) {
@@ -120,22 +129,22 @@ export class AppService {
 
     }
     for (let i = 1; i <= 300; i++) {
-      insertSQL += Math.random()*100;
+      insertSQL += Math.random() * 100;
       insertSQL += ','
     }
     for (let i = 1; i <= 300; i++) {
-      insertSQL += Math.random()*100;
+      insertSQL += Math.random() * 100;
       insertSQL += ','
     }
     for (let i = 1; i <= 300; i++) {
-      insertSQL += Math.random()*100;
+      insertSQL += Math.random() * 100;
       if (i != 300) {
         insertSQL += ','
       }
     }
     insertSQL += ')'
-    const end = new Date().getTime();
-    console.log('生成随机数据完成，耗时' + (end - start) + '毫秒');
+    // const end = new Date().getTime();
+    // console.log('生成随机数据完成，耗时' + (end - start) + '毫秒');
     return insertSQL;
   }
 
