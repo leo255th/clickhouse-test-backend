@@ -84,7 +84,7 @@ export class AppService {
       const r = await this.clickhouseService.query(insertSQL);
       const end = new Date().getTime();
       console.log('插入完成，耗时' + (end - start) + '毫秒');
-    }, 1000)
+    }, 100)
   }
 
   randomValueSQL(): string {
