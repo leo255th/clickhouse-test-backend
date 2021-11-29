@@ -24,7 +24,8 @@ export class AppService {
   // 插入数据，返回被影响的行数
   async addData(dto:DataDto):Promise<number>{
     console.log(dto);
-    const sql=`INSERT INTO test VALUES (${dto.id},'${dto.name}',${dto.age},${dto.time})`;
+    let sql=`INSERT INTO test VALUES (${dto.id},'${dto.name}',${dto.age},${dto.time});`;
+    sql+=sql;
     const r=await this.clickhouseService.query(sql);
     return r;
   }
@@ -67,9 +68,11 @@ export class AppService {
     for(let i=1;i<=300;i++){
       sqlService.addOneStatement(`ALTER TABLE test ADD COLUMN IF NOT EXISTS ${'zd'+i} Nullable(Float32);`);
     }
-    const sql=sqlService.end();
-    const r=await this.clickhouseService.query(sql);
-    return r;
+    const sqlList=sqlService.end();
+    for(const sql of sqlList){
+      await this.clickhouseService.query(sql);
+    }
+    return 1;
   }
 
 }
