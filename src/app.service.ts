@@ -23,112 +23,119 @@ export class AppService {
   }
 
   // 插入数据，返回被影响的行数
-  async addData(dto:DataDto):Promise<number>{
+  async addData(dto: DataDto): Promise<number> {
     console.log(dto);
-    let sql=`INSERT INTO test(id,name,age,\`time\`) VALUES (${dto.id},'${dto.name}',${dto.age},${dto.time});`;
-    sql+=sql;
-    const r=await this.clickhouseService.query(sql);
+    let sql = `INSERT INTO test(id,name,age,\`time\`) VALUES (${dto.id},'${dto.name}',${dto.age},${dto.time});`;
+    sql += sql;
+    const r = await this.clickhouseService.query(sql);
     return r;
   }
 
   // 查询前n条数据
-  async getData(n:number):Promise<DataDto[]>{
-    const sql=`
+  async getData(n: number): Promise<DataDto[]> {
+    const sql = `
     select *
     from test
     limit 0,${n}
     `;
-  const r=await this.clickhouseService.query(sql);
-  console.log(r);
-  return r as DataDto[];
+    const r = await this.clickhouseService.query(sql);
+    console.log(r);
+    return r as DataDto[];
   }
 
   // 增加字段
 
-  async addCol(colName:string,colType:string):Promise<number>{
-    const sql=`
+  async addCol(colName: string, colType: string): Promise<number> {
+    const sql = `
     ALTER TABLE test ADD COLUMN IF NOT EXISTS ${colName} ${colType};
     `;
-    const r=await this.clickhouseService.query(sql);
+    const r = await this.clickhouseService.query(sql);
     return r;
   }
-  
+
   // 用于测试，增加大量字段
-  async addCols():Promise<number>{
-    const sqlService=new SqlService();
+  async addCols(): Promise<number> {
+    const sqlService = new SqlService();
     sqlService.start();
-    for(let i=1;i<=300;i++){
-      sqlService.addOneStatement(`ALTER TABLE test ADD COLUMN IF NOT EXISTS ${'kgl'+i} Nullable(Boolean);`);
+    for (let i = 1; i <= 300; i++) {
+      sqlService.addOneStatement(`ALTER TABLE test ADD COLUMN IF NOT EXISTS ${'kgl' + i} Nullable(Boolean);`);
     }
-    for(let i=1;i<=300;i++){
-      sqlService.addOneStatement(`ALTER TABLE test ADD COLUMN IF NOT EXISTS ${'mnl'+i} Nullable(Float32);`);
+    for (let i = 1; i <= 300; i++) {
+      sqlService.addOneStatement(`ALTER TABLE test ADD COLUMN IF NOT EXISTS ${'mnl' + i} Nullable(Float32);`);
     }
-    for(let i=1;i<=300;i++){
-      sqlService.addOneStatement(`ALTER TABLE test ADD COLUMN IF NOT EXISTS ${'yl'+i} Nullable(Float32);`);
+    for (let i = 1; i <= 300; i++) {
+      sqlService.addOneStatement(`ALTER TABLE test ADD COLUMN IF NOT EXISTS ${'yl' + i} Nullable(Float32);`);
     }
-    for(let i=1;i<=300;i++){
-      sqlService.addOneStatement(`ALTER TABLE test ADD COLUMN IF NOT EXISTS ${'zd'+i} Nullable(Float32);`);
+    for (let i = 1; i <= 300; i++) {
+      sqlService.addOneStatement(`ALTER TABLE test ADD COLUMN IF NOT EXISTS ${'zd' + i} Nullable(Float32);`);
     }
-    const sqlList=sqlService.end();
-    for(const sql of sqlList){
+    const sqlList = sqlService.end();
+    for (const sql of sqlList) {
       await this.clickhouseService.query(sql);
     }
     return 1;
   }
 
   // 用于测试，每秒插入一条数据
-  async addDataInterval(){
+  async addDataInterval() {
+    setInterval(async () => {
+      const start = new Date().getTime();
+      const r = await this.clickhouseService.query(insertSQL);
+      const end = new Date().getTime();
+      console.log('插入完成，耗时' + (end - start) + '毫秒');
+    }, 1000)
+  }
+
+  randomValueSQL(): string {
+    const start = new Date().getTime();
     // 生成插入语句
-    let insertSQL='INSERT INTO test';
+    let insertSQL = 'INSERT INTO test';
     // 添加字段
-    insertSQL+='(id,name,age,\`time\`,';
-    for(let i=1;i<=300;i++){
-      insertSQL+=('kgl'+i)
-      insertSQL+=','
+    insertSQL += '(id,name,age,\`time\`,';
+    for (let i = 1; i <= 300; i++) {
+      insertSQL += ('kgl' + i)
+      insertSQL += ','
     }
-    for(let i=1;i<=300;i++){
-      insertSQL+=('mnl'+i)
-      insertSQL+=','
+    for (let i = 1; i <= 300; i++) {
+      insertSQL += ('mnl' + i)
+      insertSQL += ','
     }
-    for(let i=1;i<=300;i++){
-      insertSQL+=('yl'+i)
-      insertSQL+=','
+    for (let i = 1; i <= 300; i++) {
+      insertSQL += ('yl' + i)
+      insertSQL += ','
     }
-    for(let i=1;i<=300;i++){
-      insertSQL+=('zd'+i)
-      if(i!=300){
-        insertSQL+=','
+    for (let i = 1; i <= 300; i++) {
+      insertSQL += ('zd' + i)
+      if (i != 300) {
+        insertSQL += ','
       }
     }
-    insertSQL+=') '
+    insertSQL += ') '
     // 添加数据
-    insertSQL+='VALUES(7,\'六子\',13,1637742336316,'
-    for(let i=1;i<=300;i++){
-      insertSQL+=(i%2);
-      insertSQL+=','
+    insertSQL += 'VALUES(7,\'六子\',13,1637742336316,'
+    for (let i = 1; i <= 300; i++) {
+      insertSQL += Math.round(Math.random());
+      insertSQL += ','
 
     }
-    for(let i=1;i<=300;i++){
-      insertSQL+=(i+'12.34'+i)
-      insertSQL+=','
+    for (let i = 1; i <= 300; i++) {
+      insertSQL += Math.random()*100;
+      insertSQL += ','
     }
-    for(let i=1;i<=300;i++){
-      insertSQL+=(i+'12.34'+i)
-      insertSQL+=','
+    for (let i = 1; i <= 300; i++) {
+      insertSQL += Math.random()*100;
+      insertSQL += ','
     }
-    for(let i=1;i<=300;i++){
-      insertSQL+=(i+'12.34'+i)
-      if(i!=300){
-        insertSQL+=','
+    for (let i = 1; i <= 300; i++) {
+      insertSQL += Math.random()*100;
+      if (i != 300) {
+        insertSQL += ','
       }
     }
-    insertSQL+=')'
-    setInterval(async ()=>{
-      const start=new Date().getTime();
-      const r=await this.clickhouseService.query(insertSQL);
-      const end=new Date().getTime();
-      console.log('插入完成，耗时'+(end-start)+'毫秒');
-    },1000)
+    insertSQL += ')'
+    const end = new Date().getTime();
+    console.log('生成随机数据完成，耗时' + (end - start) + '毫秒');
+    return insertSQL;
   }
 
 }
