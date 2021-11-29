@@ -8,7 +8,7 @@ export class SqlService{
   public start(){
     this._sql=[];
   }
-  // 在末尾添加一条sql语句。
+  // 添加一条sql语句。
   public addOneStatement(sql:string){
     if(!sql||sql.length==0){
       return false;

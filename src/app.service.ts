@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { setInterval } from 'timers';
 import { DataDto } from './app.dto';
 import { ClickhouseService } from './clickhouse.service';
 import { TableCreateSQL } from './models/table.sql.js'
@@ -26,7 +27,6 @@ export class AppService {
     console.log(dto);
     let sql=`INSERT INTO test(id,name,age,\`time\`) VALUES (${dto.id},'${dto.name}',${dto.age},${dto.time});`;
     sql+=sql;
-    console.log(sql)
     const r=await this.clickhouseService.query(sql);
     return r;
   }
@@ -74,6 +74,61 @@ export class AppService {
       await this.clickhouseService.query(sql);
     }
     return 1;
+  }
+
+  // 用于测试，每秒插入一条数据
+  async addDataInterval(){
+    // 生成插入语句
+    let insertSQL='INSERT INTO test';
+    // 添加字段
+    insertSQL+='(id,name,age,\`time\`,';
+    for(let i=1;i<=300;i++){
+      insertSQL+=('kgl'+i)
+      insertSQL+=','
+    }
+    for(let i=1;i<=300;i++){
+      insertSQL+=('mnl'+i)
+      insertSQL+=','
+    }
+    for(let i=1;i<=300;i++){
+      insertSQL+=('yl'+i)
+      insertSQL+=','
+    }
+    for(let i=1;i<=300;i++){
+      insertSQL+=('zd'+i)
+      if(i!=300){
+        insertSQL+=','
+      }
+    }
+    insertSQL+=') '
+    // 添加数据
+    insertSQL+='VALUES(7,\'六子\',13,1637742336316,'
+    for(let i=1;i<=300;i++){
+      insertSQL+='1'
+      insertSQL+=','
+
+    }
+    for(let i=1;i<=300;i++){
+      insertSQL+='12.34'
+      insertSQL+=','
+    }
+    for(let i=1;i<=300;i++){
+      insertSQL+='12.34'
+      insertSQL+=','
+    }
+    for(let i=1;i<=300;i++){
+      insertSQL+='12.34'
+      if(i!=300){
+        insertSQL+=','
+      }
+    }
+    insertSQL+=')'
+    setInterval(async ()=>{
+      const start=new Date().getTime();
+      const r=await this.clickhouseService.query(insertSQL);
+      const end=new Date().getTime();
+      console.log('插入完成，耗时'+(end-start)+'毫秒');
+    },1000)
   }
 
 }
