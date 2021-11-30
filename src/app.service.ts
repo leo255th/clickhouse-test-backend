@@ -25,7 +25,7 @@ export class AppService {
   // 插入数据，返回被影响的行数
   async addData(dto: DataDto): Promise<number> {
     console.log(dto);
-    let sql = `INSERT INTO  test5(id) VALUES (${dto.id});`;
+    let sql = `INSERT INTO  test6(id) VALUES (${dto.id});`;
     sql += sql;
     const r = await this.clickhouseService.query(sql);
     return r;
@@ -35,7 +35,7 @@ export class AppService {
   async getData(n: number): Promise<DataDto[]> {
     const sql = `
     select *
-    from  test5
+    from  test6
     limit 0,${n}
     `;
     const r = await this.clickhouseService.query(sql);
@@ -47,7 +47,7 @@ export class AppService {
 
   async addCol(colName: string, colType: string): Promise<number> {
     const sql = `
-    ALTER TABLE  test5 ADD COLUMN IF NOT EXISTS ${colName} ${colType};
+    ALTER TABLE  test6 ADD COLUMN IF NOT EXISTS ${colName} ${colType};
     `;
     const r = await this.clickhouseService.query(sql);
     return r;
@@ -58,16 +58,16 @@ export class AppService {
     const sqlService = new SqlService();
     sqlService.start();
     for (let i = 1; i <= 300; i++) {
-      sqlService.addOneStatement(`ALTER TABLE  test5 ADD COLUMN IF NOT EXISTS ${'kgl' + i} Boolean;`);
+      sqlService.addOneStatement(`ALTER TABLE  test6 ADD COLUMN IF NOT EXISTS ${'kgl' + i} Boolean;`);
     }
     for (let i = 1; i <= 300; i++) {
-      sqlService.addOneStatement(`ALTER TABLE  test5 ADD COLUMN IF NOT EXISTS ${'mnl' + i} Float32;`);
+      sqlService.addOneStatement(`ALTER TABLE  test6 ADD COLUMN IF NOT EXISTS ${'mnl' + i} Float32;`);
     }
     for (let i = 1; i <= 300; i++) {
-      sqlService.addOneStatement(`ALTER TABLE  test5 ADD COLUMN IF NOT EXISTS ${'yl' + i} Float32;`);
+      sqlService.addOneStatement(`ALTER TABLE  test6 ADD COLUMN IF NOT EXISTS ${'yl' + i} Float32;`);
     }
     for (let i = 1; i <= 300; i++) {
-      sqlService.addOneStatement(`ALTER TABLE  test5 ADD COLUMN IF NOT EXISTS ${'zd' + i} Float32;`);
+      sqlService.addOneStatement(`ALTER TABLE  test6 ADD COLUMN IF NOT EXISTS ${'zd' + i} Float32;`);
     }
     const sqlList = sqlService.end();
     for (const sql of sqlList) {
@@ -99,7 +99,7 @@ export class AppService {
   randomValueSQL(): string {
     // const start = new Date().getTime();
     // 生成插入语句
-    let insertSQL = 'INSERT INTO  test5';
+    let insertSQL = 'INSERT INTO  test6';
     // 添加字段
     insertSQL += '(id,';
     for (let i = 1; i <= 300; i++) {
