@@ -1209,5 +1209,5 @@ CREATE TABLE data_test_LZ4HC.test
  zd298   Nullable(Float32) CODEC(LZ4HC), 
  zd299   Nullable(Float32) CODEC(LZ4HC), 
  zd300   Nullable(Float32)
-)Engine=MergeTree();
+)Engine=MergeTree
 `
