@@ -29,7 +29,10 @@ export class AppController {
   }
   @Post('add-data-by-stream')
   async addDataIntervalByStream():Promise<any>{
-    return this.appService.addDataByStream();
+    await this.appService.addDataByStream();
+    return {
+      res:true
+    }
   }
   @Post('get-data')
   async getData(
