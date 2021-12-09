@@ -123,21 +123,21 @@ export class AppService {
     }
     insertSQL += ') Values';
     // 设置写入循环定时器
-    const ws = this.clickhouseService.getWriteStream(insertSQL);
+    const ws = await this.clickhouseService.getWriteStream(insertSQL);
     console.log('开始设定循环')
     try {
       setInterval(async () => {
         const start = new Date().getTime();
         for (let i = 0; i < dataSize; i++) {
           // 每行的样子应该是'(xxx,xxx,xxx,xxx,...,xxx)'
-          await ws.writeRow(
+          ws.writeRow(
             this.randomValueArray()
           )
         }
         await ws.exec();
         const end = new Date().getTime();
         console.log('插入完成，耗时' + (end - start) + '毫秒');
-      }, 1000 * 60)
+      }, 1000 * 10)
     }
     catch (e) {
       console.error(e);
