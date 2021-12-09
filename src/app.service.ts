@@ -124,7 +124,7 @@ export class AppService {
     insertSQL += ') Values';
     // 设置写入循环定时器
     setInterval(async () => {
-     
+      const start = new Date().getTime();
       const ws = await this.clickhouseService.getWriteStream(insertSQL);
       for (let i = 0; i < dataSize; i++) {
         // 每行的样子应该是'(xxx,xxx,xxx,xxx,...,xxx)'
@@ -132,6 +132,9 @@ export class AppService {
          '(' +this.randomValueArray().join(',')+')'
         )
       }
+      await ws.exec();
+      const end = new Date().getTime();
+      console.log('插入完成，耗时' + (end - start) + '毫秒');
     }, 1000 * 60)
   }
   randomValueArray(): Array<number> {
