@@ -96,9 +96,9 @@ export class AppService {
     }, 1000)
   }
 
-  // 用于测试，按一定频率插入流数据
-  async addDataIntervalByStream() {
-    const dataSize = 60;
+  // 用于测试，插入流数据
+  async addDataByStream() {
+    const dataSize = 60*5;
     // 生成insertSQL,在这里只描述要插入的表和字段，以获得流对象
     let insertSQL = 'INSERT INTO  test ';
     // 添加字段
@@ -122,34 +122,25 @@ export class AppService {
       }
     }
     insertSQL += ') Values';
-    // 设置写入循环定时器
+    
     const ws = await this.clickhouseService.getWriteStream(insertSQL);
-    console.log('开始设定循环')
-    try {
-      setInterval(async () => {
-        const start = new Date().getTime();
-        for (let i = 0; i < dataSize; i++) {
-          // 每行的样子应该是'(xxx,xxx,xxx,xxx,...,xxx)'
-          ws.writeRow(
-            '('+this.randomValueArray().join(',')+')'
-          )
-        }
-        await ws.exec();
-        const end = new Date().getTime();
-        console.log('插入完成，耗时' + (end - start) + '毫秒');
-      }, 1000 * 10)
+    const start = new Date().getTime();
+    for (let i = 0; i < dataSize; i++) {
+      // 每行的样子应该是'(xxx,xxx,xxx,xxx,...,xxx)'
+      ws.writeRow(
+        '(' + this.randomValueArray().join(',') + ')'
+      )
     }
-    catch (e) {
-      console.error(e);
-    }
-    finally{
-      return {
-        res:true
-      }
+    const send = new Date().getTime();
+    console.log('生成随机数据完成，耗时' + (send - start) + '毫秒');
+    await ws.exec();
+    const end = new Date().getTime();
+    console.log('插入完成，耗时' + (end - start) + '毫秒');
+    return {
+      res: true
     }
   }
   randomValueArray(): Array<number> {
-    const start = new Date().getTime();
     // 最开始的数据是ID字段，都写1
     const a = [1];
     for (let i = 1; i <= 300; i++) {
@@ -165,8 +156,6 @@ export class AppService {
     for (let i = 1; i <= 300; i++) {
       a.push(Math.random() * 100);
     }
-    const end = new Date().getTime();
-    console.log('生成随机数据完成，耗时' + (end - start) + '毫秒');
     return a;
   }
   randomValueSQL(): string {
