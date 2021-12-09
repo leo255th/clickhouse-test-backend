@@ -28,7 +28,7 @@ export class AppController {
     return this.appService.addDataIntervalBySqls();
   }
   @Post('add-data-interval-by-stream')
-  async addDataIntervalByStream():Promise<void>{
+  async addDataIntervalByStream():Promise<any>{
     return this.appService.addDataIntervalByStream();
   }
   @Post('get-data')

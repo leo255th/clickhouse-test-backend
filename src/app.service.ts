@@ -142,6 +142,11 @@ export class AppService {
     catch (e) {
       console.error(e);
     }
+    finally{
+      return {
+        res:true
+      }
+    }
   }
   randomValueArray(): Array<number> {
     const start = new Date().getTime();
