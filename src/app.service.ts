@@ -132,7 +132,12 @@ export class AppService {
       // )
       ws.writeRow(
         this.randomValueArray()
-      )
+      ).then((data)=>{
+        console.log('data:',data)
+      })
+      .catch((err)=>{
+        console.error(err);
+      })
     }
     const send = new Date().getTime();
     console.log('生成随机数据完成，耗时' + (send - start) + '毫秒');
