@@ -130,14 +130,10 @@ export class AppService {
       // ws.writeRow(
       //   '(' + this.randomValueArray().join(',') + ')'
       // )
-      ws.writeRow(
+      const a=await ws.writeRow(
         this.randomValueArray()
-      ).then((data)=>{
-        console.log('data:',data)
-      })
-      .catch((err)=>{
-        console.error(err);
-      })
+      );
+      console.log('writeRow:',a)
     }
     const send = new Date().getTime();
     console.log('生成随机数据完成，耗时' + (send - start) + '毫秒');
