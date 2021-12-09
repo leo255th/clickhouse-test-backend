@@ -3,7 +3,7 @@ import { Injectable, Scope } from '@nestjs/common';
 import { AppConfig } from 'app.config';
 // import { ClickHouse } from 'clickhouse';
 
-@Injectable({ scope: Scope.REQUEST })
+@Injectable()
 export class ClickhouseService {
 
   private _clickhouse;
