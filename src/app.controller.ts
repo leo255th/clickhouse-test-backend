@@ -22,10 +22,14 @@ export class AppController {
   ): Promise<number> {
     return this.appService.addData(dto);
   }
-  @Post('add-data-interval')
-  async addDataInterval(
+  @Post('add-data-interval-by-sqls')
+  async addDataIntervalBySqls(
   ): Promise<void> {
-    return this.appService.addDataInterval();
+    return this.appService.addDataIntervalBySqls();
+  }
+  @Post('add-data-interval-by-stream')
+  async addDataIntervalByStream():Promise<void>{
+    return this.appService.addDataIntervalByStream();
   }
   @Post('get-data')
   async getData(

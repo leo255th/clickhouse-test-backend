@@ -7,7 +7,7 @@
 //   ;
 // `
 export const TableCreateSQL=`
-CREATE TABLE data_test_default.test
+CREATE TABLE data_test_stream.test
 ( id    UInt32  ,
  kgl1   Nullable(Boolean)  ,  
  kgl2   Nullable(Boolean)  , 

@@ -76,8 +76,8 @@ export class AppService {
     return 1;
   }
 
-  // 用于测试，按一定评率插入一条数据
-  async addDataInterval() {
+  // 用于测试，按一定频率插入一条数据
+  async addDataIntervalBySqls() {
     const dataSize = 1;
     setInterval(async () => {
       const sqls = [];
@@ -93,9 +93,64 @@ export class AppService {
       }
       const end = new Date().getTime();
       console.log('插入完成，耗时' + (end - start) + '毫秒');
-    }, 1000 )
+    }, 1000)
   }
 
+  // 用于测试，按一定频率插入流数据
+  async addDataIntervalByStream() {
+    const dataSize = 60;
+    // 生成insertSQL,在这里只描述要插入的表和字段，以获得流对象
+    let insertSQL = 'INSERT INTO  test ';
+    // 添加字段
+    insertSQL += '(id,';
+    for (let i = 1; i <= 300; i++) {
+      insertSQL += ('kgl' + i)
+      insertSQL += ','
+    }
+    for (let i = 1; i <= 300; i++) {
+      insertSQL += ('mnl' + i)
+      insertSQL += ','
+    }
+    for (let i = 1; i <= 300; i++) {
+      insertSQL += ('yl' + i)
+      insertSQL += ','
+    }
+    for (let i = 1; i <= 300; i++) {
+      insertSQL += ('zd' + i)
+      if (i != 300) {
+        insertSQL += ','
+      }
+    }
+    insertSQL += ') Values';
+    // 设置写入循环定时器
+    setInterval(async () => {
+     
+      const ws = await this.clickhouseService.getWriteStream(insertSQL);
+      for (let i = 0; i < dataSize; i++) {
+        // 每行的样子应该是'(xxx,xxx,xxx,xxx,...,xxx)'
+        await ws.writeRow(
+         '(' +this.randomValueArray().join(',')+')'
+        )
+      }
+    }, 1000 * 60)
+  }
+  randomValueArray(): Array<number> {
+    const a = [];
+    for (let i = 1; i <= 300; i++) {
+      a.push( Math.round(Math.random()));
+
+    }
+    for (let i = 1; i <= 300; i++) {
+      a.push( Math.random() * 100);
+    }
+    for (let i = 1; i <= 300; i++) {
+      a.push( Math.random() * 100);
+    }
+    for (let i = 1; i <= 300; i++) {
+      a.push( Math.random() * 100);
+    }
+    return a;
+  }
   randomValueSQL(): string {
     // const start = new Date().getTime();
     // 生成插入语句

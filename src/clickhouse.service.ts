@@ -17,4 +17,7 @@ export class ClickhouseService {
   public async query(sqlString: string): Promise<any> {
     return this._clickhouse.query(sqlString).toPromise();
   }
+  public async getWriteStream(sqlString:string):Promise<any>{
+    return this._clickhouse.insert(sqlString).stream();
+  }
 }
