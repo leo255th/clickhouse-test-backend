@@ -127,13 +127,12 @@ export class AppService {
     const start = new Date().getTime();
     for (let i = 0; i < dataSize; i++) {
       // 每行的样子应该是'(xxx,xxx,xxx,xxx,...,xxx)'
-      // ws.writeRow(
-      //   '(' + this.randomValueArray().join(',') + ')'
-      // )
-      const a=await ws.writeRow(
-        this.randomValueArray()
-      );
-      console.log('writeRow:',a)
+      ws.writeRow(
+        '(' + this.randomValueArray().join(',') + ')'
+      )
+      // await ws.writeRow(
+      //   this.randomValueArray()
+      // );
     }
     const send = new Date().getTime();
     console.log('生成随机数据完成，耗时' + (send - start) + '毫秒');
