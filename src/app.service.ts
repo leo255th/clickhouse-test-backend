@@ -131,7 +131,7 @@ export class AppService {
         for (let i = 0; i < dataSize; i++) {
           // 每行的样子应该是'(xxx,xxx,xxx,xxx,...,xxx)'
           ws.writeRow(
-            this.randomValueArray()
+            '('+this.randomValueArray().join(',')+')'
           )
         }
         await ws.exec();
