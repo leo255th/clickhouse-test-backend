@@ -102,33 +102,36 @@ export class AppService {
     // 生成insertSQL,在这里只描述要插入的表和字段，以获得流对象
     let insertSQL = 'INSERT INTO  test ';
     // 添加字段
-    insertSQL += '(id,';
-    for (let i = 1; i <= 300; i++) {
-      insertSQL += ('kgl' + i)
-      insertSQL += ','
-    }
-    for (let i = 1; i <= 300; i++) {
-      insertSQL += ('mnl' + i)
-      insertSQL += ','
-    }
-    for (let i = 1; i <= 300; i++) {
-      insertSQL += ('yl' + i)
-      insertSQL += ','
-    }
-    for (let i = 1; i <= 300; i++) {
-      insertSQL += ('zd' + i)
-      if (i != 300) {
-        insertSQL += ','
-      }
-    }
-    insertSQL += ') Values';
+    // insertSQL += '(id,';
+    // for (let i = 1; i <= 300; i++) {
+    //   insertSQL += ('kgl' + i)
+    //   insertSQL += ','
+    // }
+    // for (let i = 1; i <= 300; i++) {
+    //   insertSQL += ('mnl' + i)
+    //   insertSQL += ','
+    // }
+    // for (let i = 1; i <= 300; i++) {
+    //   insertSQL += ('yl' + i)
+    //   insertSQL += ','
+    // }
+    // for (let i = 1; i <= 300; i++) {
+    //   insertSQL += ('zd' + i)
+    //   if (i != 300) {
+    //     insertSQL += ','
+    //   }
+    // }
+    // insertSQL += ') Values';
     
     const ws = await this.clickhouseService.getWriteStream(insertSQL);
     const start = new Date().getTime();
     for (let i = 0; i < dataSize; i++) {
       // 每行的样子应该是'(xxx,xxx,xxx,xxx,...,xxx)'
+      // ws.writeRow(
+      //   '(' + this.randomValueArray().join(',') + ')'
+      // )
       ws.writeRow(
-        '(' + this.randomValueArray().join(',') + ')'
+        this.randomValueArray()
       )
     }
     const send = new Date().getTime();
