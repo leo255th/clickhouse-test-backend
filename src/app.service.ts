@@ -123,13 +123,14 @@ export class AppService {
     }
     insertSQL += ') Values';
     // 设置写入循环定时器
+    const ws = await this.clickhouseService.getWriteStream(insertSQL);
+    console.log('开始设定循环')
     setInterval(async () => {
       const start = new Date().getTime();
-      const ws = await this.clickhouseService.getWriteStream(insertSQL);
       for (let i = 0; i < dataSize; i++) {
         // 每行的样子应该是'(xxx,xxx,xxx,xxx,...,xxx)'
         await ws.writeRow(
-         '(' +this.randomValueArray().join(',')+')'
+          '(' + this.randomValueArray().join(',') + ')'
         )
       }
       await ws.exec();
@@ -138,20 +139,23 @@ export class AppService {
     }, 1000 * 60)
   }
   randomValueArray(): Array<number> {
+    const start = new Date().getTime();
     const a = [];
     for (let i = 1; i <= 300; i++) {
-      a.push( Math.round(Math.random()));
+      a.push(Math.round(Math.random()));
 
     }
     for (let i = 1; i <= 300; i++) {
-      a.push( Math.random() * 100);
+      a.push(Math.random() * 100);
     }
     for (let i = 1; i <= 300; i++) {
-      a.push( Math.random() * 100);
+      a.push(Math.random() * 100);
     }
     for (let i = 1; i <= 300; i++) {
-      a.push( Math.random() * 100);
+      a.push(Math.random() * 100);
     }
+    const end = new Date().getTime();
+    console.log('生成随机数据完成，耗时' + (end - start) + '毫秒');
     return a;
   }
   randomValueSQL(): string {
