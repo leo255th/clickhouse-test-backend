@@ -18,7 +18,7 @@ export class PosthogService {
 
   async write100Array(): Promise<number> {
     return new Promise((res, rej) => {
-      const writeStream = this.ch.query(`INSERT INTO  data_test_stream.test FORMAT TSV`, (err) => {
+      const writeStream = this.ch.query(`INSERT INTO  data_test_stream_posthog.test FORMAT TSV`, (err) => {
         if (err) {
           console.log(err)
           res(0);
