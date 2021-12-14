@@ -28,7 +28,7 @@ export class PosthogService {
       });
       // 循环写入100次
       for (let i = 0; i <= 100; i++) {
-        writeStream.write([...this.appService.randomValueArray()]);
+        writeStream.write([1]);
       }
       writeStream.end();
     })
