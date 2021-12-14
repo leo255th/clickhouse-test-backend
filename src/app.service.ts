@@ -146,7 +146,7 @@ export class AppService {
   }
   randomValueArray(): Array<number> {
     // 最开始的数据是ID字段，都写1
-    const a = [];
+    const a = [1];
     for (let i = 1; i <= 300; i++) {
       a.push(Math.round(Math.random()));
 
