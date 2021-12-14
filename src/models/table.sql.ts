@@ -8,7 +8,7 @@
 // `
 export const TableCreateSQL=`
 CREATE TABLE data_test_stream_posthog.test
-( id    UInt32  ,
+(
  kgl1   Nullable(Boolean)  ,  
  kgl2   Nullable(Boolean)  , 
  kgl3   Nullable(Boolean)  , 
