@@ -1210,4 +1210,4 @@ CREATE TABLE data_test_stream_posthog.test
  zd299   Nullable(Float32)  , 
  zd300   Nullable(Float32)
 )Engine=MergeTree()
- ORDER BY (id);`
+;`
