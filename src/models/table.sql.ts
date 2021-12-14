@@ -8,7 +8,7 @@
 // `
 export const TableCreateSQL=`
 CREATE TABLE data_test_stream_posthog.test
-(
+( id    Int32,
  kgl1   Nullable(Boolean)  ,  
  kgl2   Nullable(Boolean)  , 
  kgl3   Nullable(Boolean)  , 
@@ -1210,4 +1210,4 @@ CREATE TABLE data_test_stream_posthog.test
  zd299   Nullable(Float32)  , 
  zd300   Nullable(Float32)
 )Engine=MergeTree()
-;`
+ ORDER BY (id);`
