@@ -1,11 +1,13 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { DataDto } from './app.dto';
 import { AppService } from './app.service';
+import { PosthogService } from './posthog.service';
 
 @Controller()
 export class AppController {
   constructor(
     private readonly appService: AppService,
+    private readonly posthogService: PosthogService
   ) { }
 
   @Get()
@@ -28,12 +30,18 @@ export class AppController {
     return this.appService.addDataIntervalBySqls();
   }
   @Post('add-data-by-stream')
-  async addDataIntervalByStream():Promise<any>{
+  async addDataIntervalByStream(): Promise<any> {
     await this.appService.addDataByStream();
     return {
-      res:true
+      res: true
     }
   }
+  @Post('add-data-by-stream-posthog')
+  async addDataByStreamOfPostHog(): Promise<number> {
+    return await this.posthogService.write100Array();
+
+  }
+
   @Post('get-data')
   async getData(
     @Body() dto: { n: number }
@@ -43,9 +51,9 @@ export class AppController {
 
   @Post('add-col')
   async addCol(
-    @Body() dto: { colName: string, colType:string }
+    @Body() dto: { colName: string, colType: string }
   ): Promise<number> {
-    return this.appService.addCol(dto.colName,dto.colType);
+    return this.appService.addCol(dto.colName, dto.colType);
   }
   @Post('add-cols')
   async addCols(
