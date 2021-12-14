@@ -10,7 +10,7 @@ export class PosthogService {
     private appService: AppService
   ) {
     this.ch = new ClickHouse({
-      host: AppConfig.clickhouse.url,
+      host: 'localhost',
       port: AppConfig.clickhouse.port,
       format: 'JSON', // query的结果会是json格式
     })
@@ -28,7 +28,7 @@ export class PosthogService {
       });
       // 循环写入100次
       for (let i = 0; i <= 100; i++) {
-        writeStream.write(this.appService.randomValueArray());
+        writeStream.write([...this.appService.randomValueArray()]);
       }
       writeStream.end();
     })
